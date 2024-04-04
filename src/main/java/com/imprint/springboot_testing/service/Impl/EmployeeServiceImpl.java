@@ -9,7 +9,9 @@ import com.imprint.springboot_testing.model.Store;
 import com.imprint.springboot_testing.repository.EmployeeRepository;
 import com.imprint.springboot_testing.repository.StoreRepository;
 import com.imprint.springboot_testing.service.EmployeeService;
+import org.springframework.stereotype.Service;
 
+@Service
 public class EmployeeServiceImpl implements EmployeeService {
     private EmployeeRepository employeeRepository;
     private StoreRepository storeRepository;
@@ -33,29 +35,42 @@ public class EmployeeServiceImpl implements EmployeeService {
                 .lastname(createEmployeeDto.getLastname())
                 .build();
         Employee savedEmployee  = employeeRepository.save(employee);
-//        System.out.println(savedEmployee.getStore().getName());
         return  savedEmployee;
-//        Employee savedEmployee = employeeRepository.save(employee);
-//        System.out.println(store.getName());
-//        System.out.println(savedEmployee.getEmail());
-
-//        return CreateEmployeeResponse.builder()
-//                .id(savedEmployee.getId())
-//                .email(savedEmployee.getEmail())
-//                .firstname(savedEmployee.getFirstname())
-//                .lastname(savedEmployee.getLastname())
-//                .store(mapStoreToEmployee(savedEmployee.getStore()))
-//                .build();
     }
+
+    @Override
+    public Employee getEmployee(Long employeeId) {
+        return findEmployeeById(employeeId);
+    }
+
+    @Override
+    public Employee updateEmployee(CreateEmployeeDto createEmployeeDto, Long employeeId) {
+        Employee employee = findEmployeeById(employeeId);
+        System.out.println(employeeId);
+        System.out.println(employee.getId());
+        if (createEmployeeDto.getEmail() != null){
+            employee.setEmail(createEmployeeDto.getEmail());
+        }
+        if (createEmployeeDto.getLastname() != null){
+            employee.setLastname(createEmployeeDto.getLastname());
+        }
+        if (createEmployeeDto.getFirstname() != null){
+            employee.setFirstname(createEmployeeDto.getFirstname());
+        }
+        return employeeRepository.save(employee);
+    }
+
     private Store findStoreById(Long storeId){
         return storeRepository.findById(storeId).orElseThrow(()->new ResourceNotFoundException("store not found"));
     }
     private Boolean employeeExists(String employeeEmail){
         return employeeRepository.existsByEmail(employeeEmail);
     }
+    private Employee findEmployeeById(Long employeeId){
+        return employeeRepository.findById(employeeId).orElseThrow(()->new ResourceNotFoundException("employee does not exist"));
+    }
     private Store mapStoreToEmployee(Store store){
         if(store != null){
-            System.out.println("store id : "+store.getStoreId());
             return  Store.builder()
                     .storeId(store.getStoreId())
                     .name(store.getName())
