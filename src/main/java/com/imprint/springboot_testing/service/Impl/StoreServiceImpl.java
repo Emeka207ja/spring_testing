@@ -6,14 +6,12 @@ import com.imprint.springboot_testing.exception.ResourceExistException;
 import com.imprint.springboot_testing.model.Store;
 import com.imprint.springboot_testing.repository.StoreRepository;
 import com.imprint.springboot_testing.service.StoreService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class StoreServiceImpl implements StoreService {
-    public StoreServiceImpl(StoreRepository storeRepository) {
-        this.storeRepository = storeRepository;
-    }
-
+    @Autowired
     private StoreRepository storeRepository;
     @Override
     public CreateStoreResponse createStore(CreateStoreDto createStoreDto) {
@@ -25,8 +23,7 @@ public class StoreServiceImpl implements StoreService {
                 .build();
         Store savedStore = storeRepository.save(store);
         return CreateStoreResponse.builder()
-                .storeId(savedStore.getStoreId())
-                .name(savedStore.getName())
+                .message("store created")
                 .build();
     }
     private Boolean storeExistsByName(String storeName){

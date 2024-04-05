@@ -7,9 +7,5 @@ import lombok.Data;
 @Data
 @Builder
 public class CreateEmployeeResponse {
-    private  Long id;
-    private String firstname;
-    private String lastname;
-    private String email;
-    private Store store;
+   private String message;
 }

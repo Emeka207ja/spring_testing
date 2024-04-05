@@ -6,6 +6,5 @@ import lombok.Data;
 @Data
 @Builder
 public class CreateStoreResponse {
-    private Long storeId;
-    private String name;
+    private String message;
 }

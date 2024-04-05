@@ -9,20 +9,20 @@ import com.imprint.springboot_testing.model.Store;
 import com.imprint.springboot_testing.repository.EmployeeRepository;
 import com.imprint.springboot_testing.repository.StoreRepository;
 import com.imprint.springboot_testing.service.EmployeeService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
+    @Autowired
     private EmployeeRepository employeeRepository;
+    @Autowired
     private StoreRepository storeRepository;
 
-    public EmployeeServiceImpl(EmployeeRepository employeeRepository, StoreRepository storeRepository) {
-        this.employeeRepository = employeeRepository;
-        this.storeRepository = storeRepository;
-    }
+
 
     @Override
-    public Employee createEmployee(CreateEmployeeDto createEmployeeDto,Long storeId) {
+    public CreateEmployeeResponse createEmployee(CreateEmployeeDto createEmployeeDto,Long storeId) {
         if(employeeExists(createEmployeeDto.getEmail())){
             throw  new ResourceExistException("employee email taken");
         }
@@ -34,8 +34,10 @@ public class EmployeeServiceImpl implements EmployeeService {
                 .firstname(createEmployeeDto.getFirstname())
                 .lastname(createEmployeeDto.getLastname())
                 .build();
-        Employee savedEmployee  = employeeRepository.save(employee);
-        return  savedEmployee;
+        employeeRepository.save(employee);
+        return CreateEmployeeResponse.builder()
+                .message("created")
+                .build();
     }
 
     @Override

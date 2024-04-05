@@ -5,7 +5,7 @@ import com.imprint.springboot_testing.Dto.Employee.CreateEmployeeResponse;
 import com.imprint.springboot_testing.model.Employee;
 
 public interface EmployeeService {
-    Employee createEmployee(CreateEmployeeDto createEmployeeDto, Long storeId);
+    CreateEmployeeResponse createEmployee(CreateEmployeeDto createEmployeeDto, Long storeId);
     Employee getEmployee(Long employeeId);
     Employee updateEmployee(CreateEmployeeDto createEmployeeDto,Long employeeId);
 }

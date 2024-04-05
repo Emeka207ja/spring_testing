@@ -23,36 +23,35 @@ import java.util.ArrayList;
 
 @ExtendWith(MockitoExtension.class)
 public class StoreServiceTest {
-    private CreateStoreDto createStoreDto;
     @Mock
     private StoreRepository storeRepository;
     @InjectMocks
     private StoreServiceImpl storeService;
-    private Store store;
     @BeforeEach
     void setup(){
 
-        createStoreDto = new CreateStoreDto();
+    }
+    @DisplayName("junit test for create store when store name does not exist")
+    @Test
+    public void createStoreServicePC(){
+        CreateStoreDto createStoreDto = new CreateStoreDto();
         createStoreDto.setName("emy store");
-        store = Store.builder()
+        Store store = Store.builder()
                 .storeId(1L)
                 .name(createStoreDto.getName())
                 .employees(new ArrayList<>())
                 .build();
-    }
-    @DisplayName("junit test for create store when store name does not exist")
-    @Test
-    public void givenStoreObject_whenSave_thenReturnsStoreObject(){
         BDDMockito.given(storeRepository.existsByName(createStoreDto.getName())).willReturn(false);
         BDDMockito.given(storeRepository.save(Mockito.any(Store.class))).willReturn(store);
         CreateStoreResponse response = storeService.createStore(createStoreDto);
-        assertThat(response.getName()).isNotNull();
-        assertThat(response.getName()).isEqualTo("emy store");
-        assertThat(response.getStoreId()).isNotNull();
+        assertThat(response.getMessage()).isNotNull();
+        assertThat(response.getMessage()).isEqualTo("store created");
     }
     @DisplayName("junit test for create store when store name exist")
     @Test
-    public void givenStoreObject_whenSave_thenReturnsException(){
+    public void createStoreServiceNC(){
+        CreateStoreDto createStoreDto = new CreateStoreDto();
+        createStoreDto.setName("emy store");
         BDDMockito.given(storeRepository.existsByName(createStoreDto.getName())).willReturn(true);
         Assertions.assertThrows(ResourceExistException.class,()->storeService.createStore(createStoreDto));
     }

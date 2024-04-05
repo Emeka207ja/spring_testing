@@ -4,6 +4,5 @@ import lombok.Data;
 
 @Data
 public class CreateStoreDto {
-    private Long storeId;
     private String name;
 }

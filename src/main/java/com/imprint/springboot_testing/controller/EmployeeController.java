@@ -1,6 +1,7 @@
 package com.imprint.springboot_testing.controller;
 
 import com.imprint.springboot_testing.Dto.Employee.CreateEmployeeDto;
+import com.imprint.springboot_testing.Dto.Employee.CreateEmployeeResponse;
 import com.imprint.springboot_testing.Dto.Store.CreateStoreDto;
 import com.imprint.springboot_testing.model.Employee;
 import com.imprint.springboot_testing.service.EmployeeService;
@@ -17,7 +18,7 @@ public class EmployeeController {
         this.employeeService = employeeService;
     }
     @PostMapping("/create_employee/{storeId}")
-    public ResponseEntity<Employee>createEmployee(
+    public ResponseEntity<CreateEmployeeResponse>createEmployee(
             @RequestBody CreateEmployeeDto createEmployeeDto,
             @PathVariable("storeId") Long storeId
     ){

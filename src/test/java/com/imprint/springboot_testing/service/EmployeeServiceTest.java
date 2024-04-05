@@ -56,31 +56,26 @@ public class EmployeeServiceTest {
                 .email(createEmployeeDto.getEmail())
                 .lastname(createEmployeeDto.getLastname())
                 .firstname(createEmployeeDto.getFirstname())
-                .store(store)
                 .build();
     }
 
     @DisplayName("Junit test for save employee when employee email does not exist on db already")
     @Test
-    public  void givenEmployeeObject_whenSave_thenReturnsEmployeeObject(){
+    public  void createEmployeeServicePC(){
 
         BDDMockito.given(storeRepository.findById(1L)).willReturn(Optional.of(store));
-
-
         BDDMockito.given(employeeRepository.save(Mockito.any(Employee.class))).willReturn(employee);
         BDDMockito.given(employeeRepository.existsByEmail(createEmployeeDto.getEmail())).willReturn(false);
 
-        Employee response = this.employeeService.createEmployee(createEmployeeDto,1L);
+        CreateEmployeeResponse response = this.employeeService.createEmployee(createEmployeeDto,1L);
 
-        assertThat(response.getEmail()).isEqualTo("bright@gmail.com");
-        System.out.println(response.getStore());
-         assertThat(response.getStore()).isNotNull();
-        assertThat(response.getStore().getName()).isEqualTo("bright store");
+        assertThat(response.getMessage()).isEqualTo("created");
+
 
     }
     @DisplayName("Junit test for save employee returns exception when email exists")
     @Test
-    public void givenEmployeeObject_whenSave_thenReturnsException(){
+    public void createEmployeeServiceNC(){
         BDDMockito.given(employeeRepository.existsByEmail(createEmployeeDto.getEmail())).willReturn(true);
         org.junit.jupiter.api.Assertions.assertThrows(ResourceExistException.class,()->employeeService.createEmployee(createEmployeeDto,1L));
     }
